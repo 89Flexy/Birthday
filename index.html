@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Birthday Surprise</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="floating"></div>
+
+<section class="screen hero active" id="hero">
+  <div class="badge">A BIRTHDAY SURPRISE</div>
+  <h1>a little something for you</h1>
+  <p>Tap the envelope to begin</p>
+  <div class="envelope" onclick="nextSection('card')">💌</div>
+</section>
+
+<section class="screen" id="card">
+  <h2>Happy Birthday 🎂</h2>
+  <div class="card">Wishing you joy, success and happiness.</div>
+  <button onclick="nextSection('album')">Next</button>
+</section>
+
+<section class="screen" id="album">
+  <h2>Our Little Album 📸</h2>
+  <div class="polaroids">
+    <div class="photo">Photo 1</div>
+    <div class="photo">Photo 2</div>
+    <div class="photo">Photo 3</div>
+  </div>
+  <button onclick="nextSection('wishes')">Next</button>
+</section>
+
+<section class="screen" id="wishes">
+  <h2>Three Wishes 🌸</h2>
+  <div class="wish">Health</div>
+  <div class="wish">Happiness</div>
+  <div class="wish">Success</div>
+  <button onclick="nextSection('letter')">Read Letter</button>
+</section>
+
+<section class="screen" id="letter">
+  <h2>My Letter 💖</h2>
+  <div class="card">May this year bring wonderful memories and beautiful moments.</div>
+</section>
+
+<script src="script.js"></script>
+</body>
+</html>
