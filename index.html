@@ -1,50 +1,536 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Birthday Surprise</title>
-<link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+ <meta name="viewport"
+content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>A Premium Birthday Surprise</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet"
+    >
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    
+    <style>
+    html,
+body{
+width:100%;
+overflow-x:hidden;
+touch-action:pan-y;
+}
+
+*{
+box-sizing:border-box;
+-webkit-tap-highlight-color:transparent;
+}
+
+img{
+max-width:100%;
+height:auto;
+display:block;
+}
+
+.phone-container{
+width:100%;
+max-width:420px;
+margin:auto;
+overflow-x:hidden;
+}
+        :root {
+            --bg-color: #fcf8f5;
+            --text-dark: #2c2520;
+            --text-muted: #70635c;
+            --accent-gold: #d4af37;
+            --accent-rose: #e29b9b;
+            --card-bg: rgba(255, 255, 255, 0.75);
+            --letter-paper: #fffefb;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-dark);
+            overflow-x: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #fbf4f0 0%, #f3e6e1 100%);
+        }
+
+        /* Mobile Viewport Wrapper - Premium Shadow */
+        .phone-container {
+            width: 100%;
+            max-width: 420px;
+            height: 100vh;
+            max-height: 850px;
+            background: linear-gradient(180deg, #fffcfb 0%, #f6ebe6 100%);
+            position: relative;
+            overflow-y: auto;
+            overflow-x: hidden;
+            box-shadow: 0 25px 50px -12px rgba(74, 59, 50, 0.12);
+            border-radius: 24px;
+            scroll-behavior: smooth;
+        }
+
+        .phone-container::-webkit-scrollbar {
+            width: 0px;
+            background: transparent;
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); filter: blur(4px); }
+            to { opacity: 1; transform: translateY(0); filter: blur(0); }
+        }
+
+        @keyframes pulseSeal {
+            0% { transform: scale(1); box-shadow: 0 4px 10px rgba(186, 114, 114, 0.2); }
+            50% { transform: scale(1.08); box-shadow: 0 12px 24px rgba(186, 114, 114, 0.4); }
+            100% { transform: scale(1); box-shadow: 0 4px 10px rgba(186, 114, 114, 0.2); }
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 6px 16px;
+            border-radius: 30px;
+            font-size: 0.65rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--text-muted);
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            margin-bottom: 24px;
+            font-weight: 600;
+        }
+
+        h1, h2, h3 {
+            font-family: 'Cormorant Garamond', serif;
+            font-weight: 400;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #e8b0b0 0%, var(--accent-rose) 100%);
+            color: white;
+            border: none;
+            padding: 14px 32px;
+            border-radius: 30px;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.75rem;
+            font-weight: 600;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            box-shadow: 0 8px 20px rgba(226, 155, 155, 0.3);
+            margin-top: 20px;
+        }
+        .btn:hover { transform: translateY(-2px); box-shadow: 0 12px 24px rgba(226, 155, 155, 0.4); }
+        .btn:active { transform: translateY(0); }
+
+        .screen {
+            display: none;
+            width: 100%;
+            min-height: 100%;
+            padding: 45px 24px;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            position: relative;
+            opacity: 0;
+        }
+
+        .screen.active {
+            display: flex;
+            opacity: 1;
+            animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        /* --- ENVELOPE GATE --- */
+        #screen-envelope h1 { font-size: 2.2rem; margin-bottom: 30px; font-style: italic; }
+        .envelope-container {
+            position: relative;
+            width: 240px;
+            height: 165px;
+            perspective: 1000px;
+            margin: 25px 0;
+        }
+        .envelope {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: #eddcd4;
+            border-radius: 4px 4px 16px 16px;
+            box-shadow: 0 15px 35px rgba(74, 59, 50, 0.08);
+        }
+        .envelope-flap {
+            position: absolute;
+            top: 0; left: 0; width: 0; height: 0;
+            border-left: 120px solid transparent;
+            border-right: 120px solid transparent;
+            border-top: 95px solid #dfccc2;
+            transform-origin: top center;
+            transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+            z-index: 4;
+        }
+        .envelope.open .envelope-flap { transform: rotateX(180deg); z-index: 1; }
+        .envelope-front-flaps { position: absolute; bottom: 0; left: 0; width: 100%; height: 100%; z-index: 3; pointer-events: none; }
+        .flap-left { position: absolute; bottom: 0; left: 0; width: 0; height: 0; border-left: 125px solid #d6bebe; border-top: 165px solid transparent; border-radius: 0 0 0 16px; opacity: 0.4; }
+        .flap-right { position: absolute; bottom: 0; right: 0; width: 0; height: 0; border-right: 125px solid #d6bebe; border-top: 165px solid transparent; border-radius: 0 0 16px 0; opacity: 0.4; }
+        .flap-bottom { position: absolute; bottom: 0; left: 0; width: 0; height: 0; border-left: 120px solid transparent; border-right: 120px solid transparent; border-bottom: 100px solid #e0cdcd; border-radius: 0 0 16px 16px; }
+        .wax-seal {
+            position: absolute; top: 75px; left: 102px; width: 36px; height: 36px;
+            background: #ba7272; border-radius: 50%; z-index: 5; cursor: pointer;
+            display: flex; align-items: center; justify-content: center;
+            animation: pulseSeal 2s infinite ease-in-out; transition: all 0.3s;
+        }
+        .wax-seal:hover { transform: scale(1.1); }
+        .envelope.open .wax-seal { opacity: 0; pointer-events: none; transform: scale(0.8); }
+
+        /* --- MAIN WISH --- */
+        .profile-badge {
+            width: 86px; height: 86px; border-radius: 50%; background: #fff; padding: 4px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.05); margin-bottom: -43px; z-index: 2;
+            overflow: hidden;
+        }
+        .profile-badge img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; }
+        .content-card {
+            background: var(--card-bg); border-radius: 28px; width: 100%;
+            padding: 65px 24px 35px 24px; box-shadow: 0 15px 35px rgba(0,0,0,0.02); margin-bottom: 25px;
+            backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.6);
+        }
+        .content-card h2 { font-size: 2.2rem; color: var(--text-dark); font-style: italic; margin-bottom: 10px; }
+        .audio-player {
+            background: rgba(250, 245, 242, 0.8); border: 1px solid rgba(212, 175, 55, 0.25); border-radius: 20px;
+            padding: 14px 18px; display: flex; align-items: center; justify-content: space-between; text-align: left;
+            margin-top: 15px;
+        }
+        .player-info { display: flex; align-items: center; gap: 14px; }
+        .player-art { width: 42px; height: 42px; border-radius: 10px; background: #f6dbdb; overflow: hidden; }
+        .player-art img { width: 100%; height: 100%; object-fit: cover; }
+        .track-details p { font-size: 0.8rem; font-weight: 600; color: var(--text-dark); }
+        .track-details span { font-size: 0.65rem; color: var(--text-muted); letter-spacing: 0.5px; }
+        .play-btn { width: 34px; height: 34px; border-radius: 50%; background: var(--accent-rose); border: none; color: white; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s; font-size: 0.7rem;}
+        .play-btn:hover { transform: scale(1.05); }
+
+        /* --- PREMIUM CAROUSEL --- */
+        #screen-album h2 { font-size: 2rem; font-style: italic; }
+        .carousel-container {
+            width: 100%; height: 380px; position: relative;
+            display: flex; align-items: center; justify-content: center;
+            perspective: 1500px; margin-bottom: 20px; margin-top: 15px;
+        }
+        .carousel-card {
+            position: absolute; background: white; padding: 16px 16px 26px 16px;
+            border-radius: 24px; width: 90%; box-shadow: 0 20px 40px rgba(74, 59, 50, 0.06); text-align: left;
+            opacity: 0; visibility: hidden; transform: scale(0.85) translateZ(-100px);
+            transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+            backface-visibility: hidden;
+            border: 1px solid rgba(0,0,0,0.02);
+        }
+        .carousel-card.active { opacity: 1; visibility: visible; transform: scale(1) rotateY(0deg) translateZ(0); z-index: 3; }
+        .carousel-card.exit-left { opacity: 0; visibility: hidden; transform: translateX(-150px) rotateY(-35deg) scale(0.85); }
+        .carousel-card.exit-right { opacity: 0; visibility: hidden; transform: translateX(150px) rotateY(35deg) scale(0.85); }
+        .carousel-card.enter-right { transform: translateX(150px) rotateY(35deg) scale(0.85); }
+        .carousel-card.enter-left { transform: translateX(-150px) rotateY(-35deg) scale(0.85); }
+        
+        .carousel-img { width: 100%; aspect-ratio: 1; border-radius: 16px; margin-bottom: 16px; overflow: hidden; background: #f3e6e1; }
+        .carousel-img img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s; }
+        .carousel-card.active .carousel-img img { transform: scale(1.02); }
+        
+        .memory-tag { font-size: 0.65rem; font-weight: 600; color: #c48282; margin-bottom: 6px; letter-spacing: 1px; }
+        .memory-caption { font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 1.05rem; line-height: 1.4; color: var(--text-dark); }
+        .nav-arrow {
+            position: absolute; top: 50%; transform: translateY(-50%); width: 40px; height: 40px;
+            background: white; border-radius: 50%; display: flex; align-items: center; justify-content: center;
+            border: none; box-shadow: 0 6px 16px rgba(0,0,0,0.06); cursor: pointer; color: var(--text-dark); z-index: 10;
+            transition: all 0.2s; font-size: 1.2rem; font-weight: 300;
+        }
+        .nav-arrow:active { transform: translateY(-50%) scale(0.9); }
+        .nav-arrow.left { left: -10px; } .nav-arrow.right { right: -10px; }
+
+        /* --- NOTEBOOK FINAL LETTER --- */
+        .exact-letter-card {
+            background-color: var(--letter-paper);
+            border-radius: 32px; width: 100%;
+            padding: 50px 26px 40px 26px;
+            box-shadow: 0 20px 45px rgba(74, 59, 50, 0.05);
+            position: relative; text-align: left;
+            background-image: linear-gradient(#eadaaa 1px, transparent 1px);
+            background-size: 100% 30px; line-height: 30px; margin-bottom: 25px;
+            border: 1px solid rgba(212, 175, 55, 0.15);
+        }
+
+        .corner-flower { position: absolute; width: 32px; height: 32px; opacity: 0.7; pointer-events: none; font-size: 1.2rem; }
+        .fl-top-left { top: 15px; left: 15px; }
+        .fl-top-right { top: 15px; right: 15px; }
+        .fl-bottom-right { bottom: 15px; right: 15px; }
+
+        .letter-avatar-wrapper { display: flex; justify-content: center; margin-top: -20px; margin-bottom: 20px; }
+        .letter-avatar {
+            width: 80px; height: 80px; background: #fff; border-radius: 50%; padding: 4px;
+            box-shadow: 0 6px 15px rgba(0,0,0,0.04); overflow: hidden;
+        }
+        .letter-avatar img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; }
+
+        .sub-header-text {
+            text-align: center; font-size: 0.65rem; text-transform: uppercase;
+            letter-spacing: 2px; color: #a39288; margin-bottom: 5px; display: block; font-weight: 600;
+        }
+
+        .exact-letter-card h2 {
+            text-align: center; font-family: 'Cormorant Garamond', serif;
+            font-style: italic; font-size: 1.8rem; color: #332923; line-height: 1.2;
+        }
+
+        .letter-divider { display: flex; align-items: center; justify-content: center; gap: 10px; color: #dfcbd2; margin: 15px 0; }
+        .letter-divider::before, .letter-divider::after { content: ''; flex: 1; border-bottom: 1px dashed #ebd3d8; }
+
+        .letter-body-p {
+            font-size: 0.9rem; font-weight: 400; line-height: 30px; color: #40352e;
+            margin-bottom: 30px; text-align: justify; font-family: 'Montserrat', sans-serif;
+        }
+
+        .letter-signature-area { padding-left: 5px; margin-top: 15px; line-height: 1.4; }
+        .letter-signature-area h3 { font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 1.5rem; color: #332923; }
+        .letter-signature-area span { font-size: 0.65rem; text-transform: uppercase; letter-spacing: 2px; color: #a88779; font-weight: 600; display: block; margin-top: 4px; }
+        .outer-footer-text { font-size: 0.6rem; text-transform: uppercase; letter-spacing: 2px; color: #a89288; font-weight: 600; margin-bottom: 20px; }
+    </style>
 </head>
 <body>
-<div class="floating"></div>
 
-<section class="screen hero active" id="hero">
-  <div class="badge">A BIRTHDAY SURPRISE</div>
-  <h1>a little something for you</h1>
-  <p>Tap the envelope to begin</p>
-  <div class="envelope" onclick="nextSection('card')">💌</div>
-</section>
+    <div class="phone-container">
 
-<section class="screen" id="card">
-  <h2>Happy Birthday 🎂</h2>
-  <div class="card">Wishing you joy, success and happiness.</div>
-  <button onclick="nextSection('album')">Next</button>
-</section>
+        <div id="screen-envelope" class="screen active">
+            <span class="badge">💌 A Birthday Letter</span>
+            <p style="font-family:'Cormorant Garamond'; font-style:italic; font-size: 1.2rem; color:var(--accent-rose); margin-bottom: 5px;">a premium surprise for you</p>
+            <h1>happy birthday ♡</h1>
+            
+            <div class="envelope-container">
+                <div id="interactive-envelope" class="envelope">
+                    <div class="envelope-flap"></div>
+                    <div class="envelope-front-flaps">
+                        <div class="flap-left"></div>
+                        <div class="flap-right"></div>
+                        <div class="flap-bottom"></div>
+                    </div>
+                    <div class="wax-seal" onclick="openLetterBox()">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="white"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+                    </div>
+                </div>
+            </div>
+            <p style="font-size:0.7rem; letter-spacing:2px; color:var(--text-muted); margin-top:30px; font-weight:600;">TAP THE SEAL TO OPEN ❁</p>
+        </div>
 
-<section class="screen" id="album">
-  <h2>Our Little Album 📸</h2>
-  <div class="polaroids">
-    <div class="photo">Photo 1</div>
-    <div class="photo">Photo 2</div>
-    <div class="photo">Photo 3</div>
-  </div>
-  <button onclick="nextSection('wishes')">Next</button>
-</section>
 
-<section class="screen" id="wishes">
-  <h2>Three Wishes 🌸</h2>
-  <div class="wish">Health</div>
-  <div class="wish">Happiness</div>
-  <div class="wish">Success</div>
-  <button onclick="nextSection('letter')">Read Letter</button>
-</section>
+        <div id="screen-main" class="screen">
+            <div class="profile-badge">
+                <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=200" alt="Birthday Profile">
+            </div>
+            
+            <div class="content-card">
+                <span class="badge">🌸 A Birthday Wish</span>
+                <h2>Happy Birthday</h2>
+                <p style="font-size:0.85rem; line-height:1.7; color:var(--text-muted); margin: 20px 0 25px 0;">Today is yours. A whole little garden of wishes — for every laugh we've shared, every silly moment, and every reason you make the world brighter.</p>
+                
+                <div class="audio-player">
+                    <div class="player-info">
+                        <div class="player-art">
+                            <img src="https://images.unsplash.com/photo-1514525253161-7a46d19cd819?auto=format&fit=crop&q=80&w=100" alt="Song Cover">
+                        </div>
+                        <div class="track-details">
+                            <p>A song for your day</p>
+                            <span>WITH LOVE • 3:20</span>
+                        </div>
+                    </div>
+                    <button class="play-btn" onclick="togglePlayback()"><span id="play-icon">▶</span></button>
+                </div>
+            </div>
+            <button class="btn" onclick="navigateTo('screen-album')">See Our Album →</button>
+        </div>
 
-<section class="screen" id="letter">
-  <h2>My Letter 💖</h2>
-  <div class="card">May this year bring wonderful memories and beautiful moments.</div>
-</section>
 
-<script src="script.js"></script>
+        <div id="screen-album" class="screen">
+            <span class="badge">📂 Our Album</span>
+            <h2>our little album</h2>
+            <p style="font-size:0.85rem; color:var(--text-muted); margin-bottom:10px;">favorite moments with you ♡</p>
+
+            <div class="carousel-container">
+                <button class="nav-arrow left" onclick="triggerPremiumCarousel(-1)">‹</button>
+                
+                <div class="carousel-card active">
+                    <div class="carousel-img">
+                        <img src="https://images.unsplash.com/photo-1517457373958-b7bdd4587205?auto=format&fit=crop&q=80&w=500" alt="Memory 1">
+                    </div>
+                    <div class="memory-tag">Memory 01 / 03</div>
+                    <div class="memory-caption">the way you smile in every photo — it lights up the room.</div>
+                </div>
+
+                <div class="carousel-card">
+                    <div class="carousel-img">
+                        <img src="https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?auto=format&fit=crop&q=80&w=500" alt="Memory 2">
+                    </div>
+                    <div class="memory-tag">Memory 02 / 03</div>
+                    <div class="memory-caption">Ordinary days with you have always been my favourite ones.</div>
+                </div>
+
+                <div class="carousel-card">
+                    <div class="carousel-img">
+                        <img src="https://images.unsplash.com/photo-1529156069898-49953e39b3ac?auto=format&fit=crop&q=80&w=500" alt="Memory 3">
+                    </div>
+                    <div class="memory-tag">Memory 03 / 03</div>
+                    <div class="memory-caption">Thank you for showing up — for everything, every time.</div>
+                </div>
+
+                <button class="nav-arrow right" onclick="triggerPremiumCarousel(1)">›</button>
+            </div>
+
+            <button class="btn" onclick="navigateTo('screen-letter')">Read My Letter ✉</button>
+        </div>
+
+
+        <div id="screen-letter" class="screen">
+            <span class="badge">💮 A Birthday Letter</span>
+            
+            <div class="exact-letter-card">
+                <div class="corner-flower fl-top-left">🌸</div>
+                <div class="corner-flower fl-top-right">🌹</div>
+                <div class="corner-flower fl-bottom-right">🌼</div>
+
+                <div class="letter-avatar-wrapper">
+                    <div class="letter-avatar">
+                        <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&q=80&w=200" alt="Sender Avatar">
+                    </div>
+                </div>
+
+                <span class="sub-header-text">✿ A letter, just for you ✿</span>
+                <h2>Dearest birthday human,</h2>
+
+                <div class="letter-divider">🌸</div>
+
+                <div class="letter-body-p">
+                    there's no card big enough for everything i'd like to say, so i made you a little garden — with a song, our pictures, and a few of my favourite wishes for the year ahead.
+                </div>
+                
+                <div class="letter-body-p">
+                    thank you for the small and unseen things — the way you check in, the jokes only we get, the quiet patience when i'm being too much. i noticed. i still notice.
+                </div>
+
+                <div class="letter-body-p">
+                    i hope today you feel celebrated. i hope you eat something delicious that you didn't have to make, and someone tells you you're loved (you are). most of all, i hope this year ahead feels — for one whole trip around the sun — exactly the way you've always made me feel: completely, completely loved.
+                </div>
+
+                <div class="letter-divider">💖</div>
+
+                <div class="letter-signature-area">
+                    <h3>with all my love,</h3>
+                    <span>— YOUR FRIEND</span>
+                </div>
+            </div>
+
+            <div class="outer-footer-text">WITH LOVE · YOUR FRIEND</div>
+            <button class="btn" style="background:#b3a094; box-shadow:none; font-size:0.65rem;" onclick="restartApp()">↻ START AGAIN</button>
+        </div>
+
+    </div>
+
+    <audio id="bg-music" src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" preload="auto" loop></audio>
+
+    <script>
+        let currentSlideIndex = 0;
+        let isTransitioning = false;
+        let audioTrack = document.getElementById('bg-music');
+
+        function openLetterBox() {
+            const envelope = document.getElementById('interactive-envelope');
+            envelope.classList.add('open');
+            
+            // Premium Confetti Burst
+            confetti({
+                particleCount: 120,
+                spread: 70,
+                origin: { y: 0.6 },
+                colors: ['#e29b9b', '#fbcbc9', '#d4af37', '#ffffff']
+            });
+
+            setTimeout(() => { navigateTo('screen-main'); }, 750);
+        }
+
+        function navigateTo(screenId) {
+            const activeScreen = document.querySelector('.screen.active');
+            if (activeScreen) {
+                activeScreen.style.opacity = '0';
+                activeScreen.classList.remove('active');
+            }
+            const targetScreen = document.getElementById(screenId);
+            targetScreen.classList.add('active');
+            document.querySelector('.phone-container').scrollTop = 0;
+        }
+
+        function triggerPremiumCarousel(direction) {
+            if (isTransitioning) return;
+            isTransitioning = true;
+
+            const slides = document.querySelectorAll('#screen-album .carousel-card');
+            const currentCard = slides[currentSlideIndex];
+            
+            let nextSlideIndex = currentSlideIndex + direction;
+            if (nextSlideIndex >= slides.length) nextSlideIndex = 0;
+            if (nextSlideIndex < 0) nextSlideIndex = slides.length - 1;
+            
+            const nextCard = slides[nextSlideIndex];
+
+            if (direction === 1) {
+                currentCard.classList.add('exit-left');
+                nextCard.className = 'carousel-card enter-right';
+            } else {
+                currentCard.classList.add('exit-right');
+                nextCard.className = 'carousel-card enter-left';
+            }
+
+            nextCard.offsetHeight; // layout reflow trigger
+
+            setTimeout(() => {
+                currentCard.classList.remove('active', 'exit-left', 'exit-right');
+                nextCard.className = 'carousel-card active';
+                currentSlideIndex = nextSlideIndex;
+                isTransitioning = false;
+            }, 50);
+        }
+
+        function togglePlayback() {
+            if (audioTrack.paused) {
+                audioTrack.play();
+                document.getElementById('play-icon').textContent = '║';
+            } else {
+                audioTrack.pause();
+                document.getElementById('play-icon').textContent = '▶';
+            }
+        }
+
+        function restartApp() {
+            currentSlideIndex = 0;
+            isTransitioning = false;
+            
+            document.getElementById('interactive-envelope').classList.remove('open');
+            const slides = document.querySelectorAll('#screen-album .carousel-card');
+            slides.forEach((s, idx) => s.className = idx === 0 ? 'carousel-card active' : 'carousel-card');
+
+            audioTrack.pause();
+            audioTrack.currentTime = 0;
+            document.getElementById('play-icon').textContent = '▶';
+
+            navigateTo('screen-envelope');
+        }
+    </script>
 </body>
 </html>
